@@ -11,11 +11,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 
 include(FCLVersion)
 
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-dev, libccd")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost1.48-all-dev, libccd")
 SET(CPACK_PACKAGE_VERSION_MAJOR ${FCL_MAJOR_VERSION})
 SET(CPACK_PACKAGE_VERSION_MINOR ${FCL_MINOR_VERSION})
 SET(CPACK_PACKAGE_VERSION_PATCH ${FCL_PATCH_VERSION})
-SET(CPACK_PACKAGE_NAME "libfcl")
+SET(CPACK_PACKAGE_NAME "fcl")
 SET(CPACK_SYSTEM_NAME "amd64")
 set(PKG_DESC "Flexible Collision Library from WillowGarage")
 
@@ -56,7 +56,7 @@ else()
   message(STATUS "FCL does not use Octomap")
 endif()
 
-find_package(Boost COMPONENTS thread date_time filesystem system unit_test_framework REQUIRED)
+find_package(Boost 1.48 COMPONENTS thread date_time filesystem system unit_test_framework REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
 if(MSVC OR MSVC90 OR MSVC10)
@@ -107,6 +107,11 @@ install(FILES "${pkg_conf_file}" DESTINATION lib/pkgconfig/ COMPONENT pkgconfig)
 
 enable_testing()
 add_subdirectory(test)
+
+set(CPACK_SYSTEM_NAME "i386")
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    set(CPACK_SYSTEM_NAME "amd64")    
+endif()
 
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}")
